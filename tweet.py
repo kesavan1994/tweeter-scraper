@@ -3,9 +3,9 @@ import pandas as pd
 import streamlit as st
 import datetime
 import snscrape.modules.twitter as sntwitter
-
 from PIL import Image
-
+import certifi
+ca = certifi.where()
 
 PAGE_CONFIG={"page_title":"StColab.io","page_icon":"smiley",
        "Layout":"centered",'background-color':'green'
@@ -13,7 +13,8 @@ PAGE_CONFIG={"page_title":"StColab.io","page_icon":"smiley",
 
 # mongodb Connection
 import pymongo
-client = pymongo.MongoClient("mongodb+srv://abcd:abcd@cluster0.naa5p8i.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://abcd:abcd@cluster0.naa5p8i.mongodb.net/?retryWrites=true&w=majority",tlsCAFile=ca)
+
 db = client.test
 records=db.twitter
 
@@ -35,7 +36,7 @@ st.set_page_config(
 #st.image('/content/pexels-pixabay-531880.jpg')
 
 img=Image.open("Twitter-Logo-2010.png")
-st.image(img,width=400,caption='Twitter')
+st.image(img,width=400)
 
 # Create a form
 with st.form('Twitter_form'):
@@ -71,7 +72,7 @@ for i,tweet in enumerate(sntwitter.TwitterSearchScraper(f'{search_term} since:{s
     break
   twitter.append([tweet.date,tweet.id,tweet.url,tweet.rawContent,tweet.user.username,
                   tweet.replyCount,tweet.retweetCount,tweet.lang,tweet.source,tweet.likeCount])
-df=pd.DataFrame(twitter,columns=['date', 'id', 'url', 'tweet content', 'user','reply count', 'retweet count','language', 'source', 'like count'])  
+df=pd.DataFrame(twitter,columns=['date', 'id', 'url', 'tweet content', 'username','reply count', 'retweet count','language', 'source', 'like count'])  
 #df['date'] = pd.to_datetime(df['date']).dt.date
 
 
@@ -111,4 +112,6 @@ st.markdown(""" <style>
 with col1:
   if st.button('Upload'):
       data=df.to_dict('records')
-      records.insert_many({search_term:data})
+      search_term=str(search_term)
+      data1={search_term:data}
+      records.insert_one(data1)
