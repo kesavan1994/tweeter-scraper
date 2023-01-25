@@ -5,5 +5,21 @@ Today, data is scattered everywhere in the world. Especially in social media, th
 
 
 
+1 : Search your tags or name
+2 : Slider help you to how many tweets you needed
+3 : date start date and end date
+4 : Give Submit button
+5 : you can download the data in Json or CSV
+6 : you can upload data into database
+
+
+![Screenshot 2023-01-25 235436](https://user-images.githubusercontent.com/115348828/214650401-f82c102e-3cc9-4c99-b032-b10ef6bb8d7a.jpg)
+
+
+
+
+
+
+
 
 
